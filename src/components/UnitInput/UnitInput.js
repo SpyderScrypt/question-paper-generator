@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import style from "./stylesheet/UnitInputStyle";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
@@ -65,19 +66,26 @@ export default class UnitInput extends Component {
       <div>
         <div style={style.inputContainer}>
           <div>
-            <span>Enter Unit Name - </span>
-            <input type="text" ref={this.unitNameInput} />
+            <input
+              type="text"
+              ref={this.unitNameInput}
+              placeholder="Enter Unit Name"
+              class="validate"
+            />
           </div>
           <div>
-            <span>Enter Marks - </span>
-            <input type="number" ref={this.unitMarksInput} />
+            <input
+              type="number"
+              ref={this.unitMarksInput}
+              placeholder="Enter Marks"
+              class="validate"
+            />
           </div>
         </div>
         <div style={style.questionInputContainer}>
           {this.state.questions.map((data, index) => {
             return (
               <div>
-                <p>Enter Question</p>
                 <input
                   style={style.questionsInputType}
                   type="text"
@@ -85,21 +93,49 @@ export default class UnitInput extends Component {
                   onChange={e => {
                     this.changeHandler(e, index);
                   }}
+                  placeholder="Enter Question"
+                  class="validate"
                 />
-                <button
+                {/* <button
                   onClick={e => {
                     this.removeHandler(e, index);
                   }}
                 >
                   Remove
-                </button>
+                </button> */}
+                <img
+                  src={process.env.PUBLIC_URL + "/close.svg"}
+                  onClick={e => {
+                    this.removeHandler(e, index);
+                  }}
+                  alt="Cancel Button"
+                  height="20px"
+                  style={style.button}
+                />
               </div>
             );
           })}
           <br />
-          <button onClick={this.addHandler}>Add</button>
+          {/* <button onClick={this.addHandler}>Add</button> */}
+          <img
+            src={process.env.PUBLIC_URL + "/add.svg"}
+            onClick={this.addHandler}
+            alt="Cancel Button"
+            height="30px"
+            style={style.button}
+          />
           <br />
-          <button onClick={this.submitHandler}>Submit</button>
+          {/* <button onClick={this.submitHandler} style={style.submitButton}>
+            Submit
+          </button> */}
+          <Link
+            href=""
+            onClick={this.submitHandler}
+            class="waves-effect waves-light btn"
+            style={style.submitButton}
+          >
+            Submit
+          </Link>
         </div>
       </div>
     );

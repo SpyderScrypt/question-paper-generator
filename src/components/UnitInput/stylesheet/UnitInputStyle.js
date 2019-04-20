@@ -11,6 +11,13 @@ const style = {
   },
   questionsInputType: {
     width: "80%"
+  },
+  button: {
+    cursor: "pointer"
+  },
+  submitButton: {
+    width: "80%",
+    marginTop: "5%"
   }
 };
 
