@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { HashRouter, Route, Link, BrowserRouter } from "react-router-dom";
-import EgComponent from "../components/EgComponent";
 import MainNavbar from "../components/MainNavbar/MainNavbar";
-import KnowledgeBase from "../components/KnowledgeBase/KnowledgeBase";
+import KnowledgeBankNavigation from "../components/KnowledgeBankNavigation/KnowledgeBankNavigation";
 import Instructions from "../components/Instructions/Instructions";
+import GeneratePaper from "../components/GeneratePaper/GeneratePaper";
+import AddUnitContainer from "../components/AddUnit/AddUnitContainer";
 
 export default class MainRouter extends Component {
   render() {
@@ -13,7 +14,10 @@ export default class MainRouter extends Component {
           {/* <EgComponent /> */}
           <MainNavbar />
           <Route path="/" exact component={Instructions} />
-          <Route path="/knowledgebase" exact component={KnowledgeBase} />
+          <Route path="/knowledgebase" exact component={KnowledgeBankNavigation} />
+          <Route path="/addUnit" exact component={AddUnitContainer} />
+          <Route path="/generatepaper" exact component={GeneratePaper} />
+
         </div>
       </HashRouter>
     );

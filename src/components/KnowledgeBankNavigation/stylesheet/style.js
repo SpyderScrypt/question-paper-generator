@@ -7,7 +7,10 @@ const style = {
       justifyContent: "space-evenly"
     },
     titleText: {
-      cursor: "pointer"
+      cursor: "pointer",
+      textDecoration:"none",
+      color: "#fff",
+
     }
   };
   

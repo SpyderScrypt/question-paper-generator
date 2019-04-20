@@ -8,6 +8,12 @@ const ipcMain = electron.ipcMain;
 const path = require("path");
 const url = require("url");
 
+// LowDb imports
+const low = require("lowdb");
+const FileSync = require("lowdb/adapters/FileSync");
+const adapter = new FileSync("db.json");
+const db = low(adapter);
+
 const {
   default: installExtension,
   REDUX_DEVTOOLS
@@ -69,11 +75,44 @@ app.on("activate", function() {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// -------------------------------- Events ---------------------------------------
 
-// Communication tutorial basic
-ipcMain.on("todo:add", (event, todo) => {
-  console.log(todo, "received data from react in index.js");
-  mainWindow.webContents.send("todo:add", "Akash");
+// On addUnit event
+ipcMain.on("addUnit", (event, unitData) => {
+  console.log(unitData, "received Unit data from react");
+  // If unit name is already present, alert user, if not then add data to db
+  let lowerCaseUnitName = unitData.unitName.toLowerCase();
+  // Get all data in db
+  let dbData = db.getState();
+  let unitNamePresentFlag = false;
+
+  for (let i = 0; i < dbData.length; i++) {
+    if (dbData[i].unitName.toLowerCase() == lowerCaseUnitName) {
+      unitNamePresentFlag = true;
+      break;
+    }
+  }
+
+  if (unitNamePresentFlag) {
+    mainWindow.webContents.send("unitNamePresent");
+  } else {
+    // Add data to db
+    let result = db
+      //   .get()
+      .push({
+        unitName: unitData.unitName,
+        questionsArr: unitData.questionsArr,
+        marks: unitData.marks
+      })
+      .write();
+  }
 });
+
+// -------------------------------- Dump ----------------------------------
+
+// Dump
+// // Communication tutorial basic
+// ipcMain.on("todo:add", (event, todo) => {
+//   console.log(todo, "received data from react in index.js");
+//   mainWindow.webContents.send("todo:add", "Akash");
+// });

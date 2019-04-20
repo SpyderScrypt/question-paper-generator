@@ -11,7 +11,11 @@ export default class MainNavbar extends Component {
             Knowledge Bank
           </Link>
         </p>
-        <p style={style.titleText}>Generate Paper</p>
+        <p style={style.titleText}>
+          <Link style={style.titleText} to={"/generatepaper"}>
+            Generate Paper
+          </Link>
+        </p>
         <p style={style.titleText}>
           <Link style={style.titleText} to={"/"}>
             Instructions
