@@ -4,7 +4,8 @@ const style = {
     backgroundColor: "rgb(57, 62, 60)",
     color: "#fff",
     textAlign: "center",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
+    fontSize: "1.3rem"
   },
   titleText: {
     cursor: "pointer",

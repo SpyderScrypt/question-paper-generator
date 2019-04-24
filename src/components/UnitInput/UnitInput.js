@@ -77,7 +77,7 @@ export default class UnitInput extends Component {
             <input
               type="number"
               ref={this.unitMarksInput}
-              placeholder="Enter Marks"
+              placeholder="Marks for this unit (optional)"
               class="validate"
             />
           </div>
@@ -96,13 +96,6 @@ export default class UnitInput extends Component {
                   placeholder="Enter Question"
                   class="validate"
                 />
-                {/* <button
-                  onClick={e => {
-                    this.removeHandler(e, index);
-                  }}
-                >
-                  Remove
-                </button> */}
                 <img
                   src={process.env.PUBLIC_URL + "/close.svg"}
                   onClick={e => {

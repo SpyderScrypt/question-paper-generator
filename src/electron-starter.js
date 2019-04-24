@@ -108,6 +108,16 @@ ipcMain.on("addUnit", (event, unitData) => {
   }
 });
 
+// On getUnitList event
+ipcMain.on("getUnitList", event => {
+  let dbData = db.getState();
+  let unitListArr = dbData.map(item => {
+    return item.unitName;
+  });
+
+  mainWindow.webContents.send("unitListReady", unitListArr);
+});
+
 // -------------------------------- Dump Code ----------------------------------
 
 // Dump

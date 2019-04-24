@@ -7,8 +7,8 @@ export default class KnowledgeBankNavigation extends Component {
     return (
       <div style={style.titleBlock}>
         <Link to={"/addUnit"} style={style.titleText}>Add Unit</Link>
-        <Link style={style.titleText}>Add Question</Link>
-        <Link style={style.titleText}>Edit Unit</Link>
+        <Link to={"/addUnit"} style={style.titleText}>Add Question</Link>
+        <Link to={"/addUnit"} style={style.titleText}>Edit Unit</Link>
       </div>
     );
   }
