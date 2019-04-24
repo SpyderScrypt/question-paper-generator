@@ -118,6 +118,57 @@ ipcMain.on("getUnitList", event => {
   mainWindow.webContents.send("unitListReady", unitListArr);
 });
 
+// On generateQuestions event
+ipcMain.on("generateQuestions", (event, questionsData) => {
+  console.log("Question Data from user ==> ", questionsData);
+
+  // Create array containing data of user given unit name to optmize
+  // so that below loops will only loop through that data and not whole db array
+  // First Get all data from db
+  let dbData = db.getState();
+  // Get all unitNames passed by user
+  let allUnitName = questionsData.map(item => {
+    return item.unit;
+  });
+  let filteredDbData = [];
+  // Get array of data from db which contains unit name passed by user
+  for (let i = 0; i < dbData.length; i++) {
+    if (allUnitName.indexOf(dbData[i].unitName) !== -1) {
+      filteredDbData.push(dbData[i]);
+    }
+  }
+  console.log("Filtered Data from user ==> ", filteredDbData);
+
+  // let finalQuestionArray = [];
+  let result = [];
+
+  questionsData.forEach(qtData => {
+    for (let i = 0; i < filteredDbData.length; i++) {
+      if (filteredDbData[i].unitName == qtData.unit) {
+        let resultObj = {};
+        resultObj.unitName = qtData.unit;
+        resultObj.questionsArr = [];
+
+        // Get number of questions in that unit
+        let noOfQuestions = filteredDbData[i].questionsArr.length;
+        // Get required questions form that unit
+        let requiredQuestions = qtData.questionsFromUnit;
+
+        // Generate "N" random numbers where "N" is requiredQuestions
+        for (let n = 0; n < requiredQuestions; n++) {
+          let randomIndex = Math.floor(Math.random() * noOfQuestions);
+          resultObj.questionsArr.push(
+            filteredDbData[i].questionsArr[randomIndex]
+          );
+          filteredDbData[i].questionsArr.splice(randomIndex, 1);
+          noOfQuestions--;
+        }
+        result.push(resultObj);
+      }
+    }
+  });
+  console.log("Result ==> ", result);
+});
 // -------------------------------- Dump Code ----------------------------------
 
 // Dump

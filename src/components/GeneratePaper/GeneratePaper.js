@@ -57,6 +57,10 @@ export default class GeneratePaper extends Component {
     });
   };
 
+  submitHandler = () => {
+    ipcRenderer.send("generateQuestions", this.state.questionsInfo);
+  };
+
   render() {
     console.log(this.state.questionsInfo);
 
