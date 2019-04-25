@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { style } from "./stylesheet/style";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
@@ -18,7 +18,9 @@ export default class GeneratePaper extends Component {
           totalMarks: ""
         }
       ],
-      unitList: []
+      unitList: [],
+      questionPaperData: [],
+      redirect: false
     };
   }
 
@@ -70,6 +72,25 @@ export default class GeneratePaper extends Component {
         unitList: data
       });
     });
+
+    ipcRenderer.on("questionPaperData", (event, data) => {
+      this.setState({
+        questionPaperData: data,
+        redirect: true
+      });
+    });
+
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/questionPaper",
+            state: { questionPaperData: this.state.questionPaperData }
+          }}
+        />
+      );
+    }
+
     return (
       <div style={style.pageContainer}>
         {this.state.questionsInfo.map((data, index) => {

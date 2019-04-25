@@ -126,6 +126,8 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
   // so that below loops will only loop through that data and not whole db array
   // First Get all data from db
   let dbData = db.getState();
+  // console.log("DB DATA ============>", dbData);
+
   // Get all unitNames passed by user
   let allUnitName = questionsData.map(item => {
     return item.unit;
@@ -134,12 +136,14 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
   // Get array of data from db which contains unit name passed by user
   for (let i = 0; i < dbData.length; i++) {
     if (allUnitName.indexOf(dbData[i].unitName) !== -1) {
-      filteredDbData.push(dbData[i]);
+      // Here deep copy is need to push data otherwise it mutates
+      // filteredDbData.push(dbData[i]);
+      filteredDbData.push(JSON.parse(JSON.stringify(dbData[i])));
     }
   }
-  console.log("Filtered Data from user ==> ", filteredDbData);
 
-  // let finalQuestionArray = [];
+  // Generate random questions for each question number as given by user and push it in
+  // result array
   let result = [];
 
   questionsData.forEach(qtData => {
@@ -148,6 +152,9 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
         let resultObj = {};
         resultObj.unitName = qtData.unit;
         resultObj.questionsArr = [];
+        resultObj.questionName = qtData.questionName;
+        resultObj.compulsoryQuestions = qtData.compulsoryQuestions;
+        resultObj.totalMarks = qtData.totalMarks;
 
         // Get number of questions in that unit
         let noOfQuestions = filteredDbData[i].questionsArr.length;
@@ -156,10 +163,13 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
 
         // Generate "N" random numbers where "N" is requiredQuestions
         for (let n = 0; n < requiredQuestions; n++) {
+          // generate random number between 1 and number of qts in that unit
           let randomIndex = Math.floor(Math.random() * noOfQuestions);
+          // push qt[randomindex]
           resultObj.questionsArr.push(
             filteredDbData[i].questionsArr[randomIndex]
           );
+          //once qt is added, remove it from questionsArr to avoid getting that qt multiple times
           filteredDbData[i].questionsArr.splice(randomIndex, 1);
           noOfQuestions--;
         }
@@ -168,6 +178,8 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
     }
   });
   console.log("Result ==> ", result);
+  mainWindow.webContents.send("questionPaperData", result);
+
 });
 // -------------------------------- Dump Code ----------------------------------
 
