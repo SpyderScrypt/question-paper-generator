@@ -17,7 +17,7 @@ export default class MainNavbar extends Component {
           </Link>
         </p>
         <p style={style.titleText}>
-          <Link style={style.titleText} to={"/"}>
+          <Link style={style.titleText} to={"/instructions"}>
             Instructions
           </Link>
         </p>

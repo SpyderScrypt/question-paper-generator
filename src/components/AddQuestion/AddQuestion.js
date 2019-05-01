@@ -5,6 +5,11 @@ import { Link } from "react-router-dom/cjs/react-router-dom";
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
 
+ipcRenderer.on("questionAddedSuccessfully", (event, data) => {
+  alert("Added Successfully");
+
+});
+
 export default class AddQuestion extends Component {
   constructor(props) {
     super(props);
@@ -90,7 +95,7 @@ export default class AddQuestion extends Component {
         <div style={style.questionInputContainer}>
           {this.state.questions.map((data, index) => {
             return (
-              <div>
+              <div key={index}>
                 <input
                   style={style.questionsInputType}
                   type="text"
@@ -99,7 +104,7 @@ export default class AddQuestion extends Component {
                     this.changeHandler(e, index);
                   }}
                   placeholder="Enter Question"
-                  class="validate"
+                  className="validate"
                 />
                 <img
                   src={process.env.PUBLIC_URL + "/close.svg"}
@@ -129,7 +134,7 @@ export default class AddQuestion extends Component {
           <Link
             href=""
             onClick={this.submitHandler}
-            class="waves-effect waves-light btn"
+            className="waves-effect waves-light btn"
             style={style.submitButton}
           >
             Submit

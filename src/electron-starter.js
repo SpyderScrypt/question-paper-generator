@@ -101,7 +101,7 @@ ipcMain.on("addUnit", (event, unitData) => {
       //   .get()
       .push({
         unitName: unitData.unitName,
-        questionsArr: unitData.questionsArr,
+        questionsArr: unitData.questionsArr
         // marks: unitData.marks
       })
       .write();
@@ -193,6 +193,35 @@ ipcMain.on("addQuestion", (event, unitData) => {
   db.find({ unitName: unitData.unitName })
     .assign({ questionsArr: newQuestionArr })
     .write();
+
+  mainWindow.webContents.send("questionAddedSuccessfully");
+});
+
+// On getSelectedUnitQuestions event
+ipcMain.on("getSelectedUnitQuestions", (event, unitName) => {
+  // Get selected unit data
+  let selectedUnit = db.find({ unitName: unitName }).value();
+  // Get questions from selected unit
+  let selectedUnitQuestions = selectedUnit.questionsArr;
+  // Send that questions array to react
+
+  mainWindow.webContents.send(
+    "selectedUnitQuestionsData",
+    selectedUnitQuestions
+  );
+});
+
+// On saveEditedQuestionsData event
+ipcMain.on("saveEditedQuestionsData", (event, data) => {
+  let unitName = data.unitName;
+  let questionsArr = data.questionsArr;
+  console.log(data);
+
+  // write new edited questionsArr to db
+  db.find({ unitName: unitName })
+    .assign({ questionsArr: questionsArr })
+    .write();
+  mainWindow.webContents.send("dataEditedSuccessfully");
 });
 
 // -------------------------------- Dump Code ----------------------------------
