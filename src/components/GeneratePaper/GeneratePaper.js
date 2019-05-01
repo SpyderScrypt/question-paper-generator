@@ -228,6 +228,7 @@ export default class GeneratePaper extends Component {
             onClick={this.addHandler}
             alt="Add Button"
             height="30px"
+            style={style.button}
           />
 
           <a

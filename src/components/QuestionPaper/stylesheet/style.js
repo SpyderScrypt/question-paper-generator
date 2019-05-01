@@ -41,5 +41,10 @@ export const style = {
   },
   questionMarks: {
     flexBasis: "10%"
+  },
+  submitButton:{
+    marginTop:"5%",
+    marginBottom:"5%",
+    width:"100%"
   }
 };

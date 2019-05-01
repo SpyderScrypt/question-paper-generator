@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Link } from "react-router-dom";
 import { style } from "./stylesheet/style";
 
 const electron = window.require("electron");

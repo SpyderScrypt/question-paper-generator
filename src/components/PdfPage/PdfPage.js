@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { style } from "./stylesheet/style";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
-export default class QuestionPaper extends Component {
+const electron = window.require("electron");
+const ipcRenderer = electron.ipcRenderer;
+
+export default class PdfPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,29 +13,27 @@ export default class QuestionPaper extends Component {
     };
   }
 
-  printHandler = () => {
-    this.setState({
-      redirect: true
-    });
-  };
+  componentDidMount() {
+    document.getElementsByClassName("main-nav")[0].style.display = "none";
+    ipcRenderer.send("print-to-pdf");
+  }
 
   render() {
     if (this.state.redirect) {
-      let questionPaperData = {
-        questionsData: this.props.location.state.questionPaperData
-          .questionsData,
-        metaDataForQuestionPaper: this.props.location.state.questionPaperData
-          .metaDataForQuestionPaper
-      };
       return (
         <Redirect
           to={{
-            pathname: "/pdfPage",
-            state: { questionPaperData: questionPaperData }
+            pathname: "/generatepaper"
           }}
         />
       );
     }
+
+    ipcRenderer.on("printSuccessful", (event, data) => {
+      this.setState({
+        redirect: true
+      });
+    });
 
     let questionsData = this.props.location.state.questionPaperData
       .questionsData;
@@ -98,13 +99,6 @@ export default class QuestionPaper extends Component {
             </div>
           );
         })}
-        <Link
-          onClick={this.printHandler}
-          className="waves-effect waves-light btn"
-          style={style.submitButton}
-        >
-          Print Question Paper
-        </Link>
       </div>
     );
   }

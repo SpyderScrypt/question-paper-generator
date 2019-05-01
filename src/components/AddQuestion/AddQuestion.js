@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { style } from "./stylesheet/style";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { Link } from "react-router-dom";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;

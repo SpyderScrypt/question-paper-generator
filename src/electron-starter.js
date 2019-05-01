@@ -1,4 +1,5 @@
 const electron = require("electron");
+const { shell } = require("electron");
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -7,6 +8,7 @@ const ipcMain = electron.ipcMain;
 
 const path = require("path");
 const url = require("url");
+const fs = require("fs");
 
 // LowDb imports
 const low = require("lowdb");
@@ -14,10 +16,10 @@ const FileSync = require("lowdb/adapters/FileSync");
 const adapter = new FileSync("db.json");
 const db = low(adapter);
 
-const {
-  default: installExtension,
-  REDUX_DEVTOOLS
-} = require("electron-devtools-installer");
+// const {
+//   default: installExtension,
+//   REDUX_DEVTOOLS
+// } = require("electron-devtools-installer");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -27,9 +29,9 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
-  installExtension(REDUX_DEVTOOLS)
-    .then(name => console.log(`Added Extension: ${name}`))
-    .catch(err => console.log("An error occurred: ", err));
+  // installExtension(REDUX_DEVTOOLS)
+  //   .then(name => console.log(`Added Extension: ${name}`))
+  //   .catch(err => console.log("An error occurred: ", err));
 
   // and load the index.html of the app.
   const startUrl =
@@ -222,6 +224,29 @@ ipcMain.on("saveEditedQuestionsData", (event, data) => {
     .assign({ questionsArr: questionsArr })
     .write();
   mainWindow.webContents.send("dataEditedSuccessfully");
+});
+
+// On print-to-pdf event (Pdf printing logic)
+ipcMain.on("print-to-pdf", function(event) {
+  // First Create a directory manually called outputpdf
+  const pdfPath = path.join(__dirname, "/outputpdf/print.pdf");
+  // Get window which is sending event
+  const win = BrowserWindow.fromWebContents(event.sender);
+  // Print pdf
+  win.webContents.printToPDF(
+    { printBackground: true, landscape: true },
+    function(error, data) {
+      if (error) throw error;
+      fs.writeFile(pdfPath, data, function(error) {
+        if (error) {
+          throw error;
+        }
+        // Open pdf after saving it to disk
+        shell.openExternal("file://" + pdfPath);
+        mainWindow.webContents.send("printSuccessful");
+      });
+    }
+  );
 });
 
 // -------------------------------- Dump Code ----------------------------------

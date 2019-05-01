@@ -22,7 +22,8 @@ export const style = {
   },
   submitButton: {
     width: "80%",
-    marginTop: "5%"
+    marginTop: "5%",
+    marginBottom: "5%"
   },
   buttonsContainer: {
     display: "flex",
@@ -30,6 +31,7 @@ export const style = {
     alignItems: "center"
   },
   button: {
-    width: "100%"
+    width: "100%",
+    cursor: "pointer"
   }
 };

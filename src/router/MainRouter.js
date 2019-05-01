@@ -8,6 +8,7 @@ import AddUnitContainer from "../components/AddUnit/AddUnitContainer";
 import QuestionPaper from "../components/QuestionPaper/QuestionPaper";
 import AddQuestionsContainer from "../components/AddQuestionsContainer/AddQuestionsContainer";
 import EditUintContainer from "../components/EditUintContainer/EditUintContainer";
+import PdfPage from "../components/PdfPage/PdfPage";
 
 export default class MainRouter extends Component {
   render() {
@@ -16,14 +17,14 @@ export default class MainRouter extends Component {
         <div>
           {/* <EgComponent /> */}
           <MainNavbar />
-          {/* <Route path="/" exact component={MainNavbar} /> */}
-          <Route path="/instructions" exact component={Instructions} />
-          <Route path="/knowledgebase" exact component={KnowledgeBankNavigation} />
-          <Route path="/addUnit" exact component={AddUnitContainer} />
-          <Route path="/generatepaper" exact component={GeneratePaper} />
-          <Route path="/questionPaper" exact component={QuestionPaper} />
-          <Route path="/addQuestion" exact component={AddQuestionsContainer} />
-          <Route path="/editUnit" exact component={EditUintContainer} />
+          <Route path="/instructions"  component={Instructions} />
+          <Route path="/knowledgebase"  component={KnowledgeBankNavigation} />
+          <Route path="/addUnit"  component={AddUnitContainer} />
+          <Route path="/generatepaper"  component={GeneratePaper} />
+          <Route path="/questionPaper"  component={QuestionPaper} />
+          <Route path="/addQuestion"  component={AddQuestionsContainer} />
+          <Route path="/editUnit" component={EditUintContainer} />
+          <Route path="/pdfPage" component={PdfPage} />
 
         </div>
       </HashRouter>
