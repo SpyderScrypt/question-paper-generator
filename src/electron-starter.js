@@ -102,7 +102,7 @@ ipcMain.on("addUnit", (event, unitData) => {
       .push({
         unitName: unitData.unitName,
         questionsArr: unitData.questionsArr,
-        marks: unitData.marks
+        // marks: unitData.marks
       })
       .write();
   }
@@ -179,8 +179,22 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
   });
   console.log("Result ==> ", result);
   mainWindow.webContents.send("questionPaperData", result);
-
 });
+
+// On addQuestion event
+ipcMain.on("addQuestion", (event, unitData) => {
+  // Get selected unit data
+  let selectedUnit = db.find({ unitName: unitData.unitName }).value();
+  // Get questions from selected unit
+  let oldQuestionsArr = selectedUnit.questionsArr;
+  // Add new and old questions in newQuestionArr
+  let newQuestionArr = [...oldQuestionsArr, ...unitData.questionsArr];
+  // write new newQuestionArr to db
+  db.find({ unitName: unitData.unitName })
+    .assign({ questionsArr: newQuestionArr })
+    .write();
+});
+
 // -------------------------------- Dump Code ----------------------------------
 
 // Dump
@@ -189,3 +203,11 @@ ipcMain.on("generateQuestions", (event, questionsData) => {
 //   console.log(todo, "received data from react in index.js");
 //   mainWindow.webContents.send("todo:add", "Akash");
 // });
+
+// LowDB Api adapter update
+// db.find({ unitName: unitData.unitName })
+// .assign({ title: "hi!" })
+// .write();
+
+// LowDB API to get Data
+// let selectedUnit = db.find({ unitName: unitData.unitName }).value();

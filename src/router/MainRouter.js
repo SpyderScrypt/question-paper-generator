@@ -6,6 +6,7 @@ import Instructions from "../components/Instructions/Instructions";
 import GeneratePaper from "../components/GeneratePaper/GeneratePaper";
 import AddUnitContainer from "../components/AddUnit/AddUnitContainer";
 import QuestionPaper from "../components/QuestionPaper/QuestionPaper";
+import AddQuestionsContainer from "../components/AddQuestionsContainer/AddQuestionsContainer";
 
 export default class MainRouter extends Component {
   render() {
@@ -19,6 +20,7 @@ export default class MainRouter extends Component {
           <Route path="/addUnit" exact component={AddUnitContainer} />
           <Route path="/generatepaper" exact component={GeneratePaper} />
           <Route path="/questionPaper" exact component={QuestionPaper} />
+          <Route path="/addQuestion" exact component={AddQuestionsContainer} />
 
         </div>
       </HashRouter>

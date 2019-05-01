@@ -5,6 +5,13 @@ export const style = {
     flexDirection: "column",
     marginTop: "15px"
   },
+  metadataContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "80%",
+    alignSelf: "center",
+    marginBottom: "35px"
+  },
   inputContainer: {
     alignSelf: "center",
     width: "80%",
@@ -21,5 +28,8 @@ export const style = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
+  },
+  button: {
+    width: "100%"
   }
 };

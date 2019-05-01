@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { style } from "./stylesheet/style";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
@@ -20,7 +20,12 @@ export default class GeneratePaper extends Component {
       ],
       unitList: [],
       questionPaperData: [],
-      redirect: false
+      redirect: false,
+      metaDataForQuestionPaper: {
+        subject: "",
+        marks: "",
+        time: ""
+      }
     };
   }
 
@@ -34,6 +39,15 @@ export default class GeneratePaper extends Component {
     questionsInfo[index][element] = e.target.value;
     this.setState({
       questionsInfo: questionsInfo
+    });
+  };
+
+  metadataChangeHandler = e => {
+    let element = e.target.name;
+    let metaDataForQuestionPaper = { ...this.state.metaDataForQuestionPaper };
+    metaDataForQuestionPaper[element] = e.target.value;
+    this.setState({
+      metaDataForQuestionPaper: metaDataForQuestionPaper
     });
   };
 
@@ -64,7 +78,7 @@ export default class GeneratePaper extends Component {
   };
 
   render() {
-    console.log(this.state.questionsInfo);
+    console.log(this.state);
 
     // listen for unitListReady which gets all unitName from db
     ipcRenderer.on("unitListReady", (event, data) => {
@@ -73,6 +87,7 @@ export default class GeneratePaper extends Component {
       });
     });
 
+    //Listen for questionPaperData which gets random questions and other data for each question Number
     ipcRenderer.on("questionPaperData", (event, data) => {
       this.setState({
         questionPaperData: data,
@@ -81,11 +96,15 @@ export default class GeneratePaper extends Component {
     });
 
     if (this.state.redirect) {
+      let questionPaperData = {
+        questionsData: this.state.questionPaperData,
+        metaDataForQuestionPaper: this.state.metaDataForQuestionPaper
+      };
       return (
         <Redirect
           to={{
             pathname: "/questionPaper",
-            state: { questionPaperData: this.state.questionPaperData }
+            state: { questionPaperData: questionPaperData }
           }}
         />
       );
@@ -93,6 +112,40 @@ export default class GeneratePaper extends Component {
 
     return (
       <div style={style.pageContainer}>
+        <div style={style.metadataContainer}>
+          <input
+            type="text"
+            name="subject"
+            value={this.state.metaDataForQuestionPaper.subject}
+            onChange={e => {
+              this.metadataChangeHandler(e);
+            }}
+            placeholder="Subject Name"
+            className="validate"
+          />
+
+          <input
+            type="text"
+            name="marks"
+            value={this.state.metaDataForQuestionPaper.marks}
+            onChange={e => {
+              this.metadataChangeHandler(e);
+            }}
+            placeholder="Marks"
+            className="validate"
+          />
+
+          <input
+            type="text"
+            name="time"
+            value={this.state.metaDataForQuestionPaper.time}
+            onChange={e => {
+              this.metadataChangeHandler(e);
+            }}
+            placeholder="Time"
+            className="validate"
+          />
+        </div>
         {this.state.questionsInfo.map((data, index) => {
           return (
             <div key={index} style={style.inputContainer}>
@@ -156,6 +209,15 @@ export default class GeneratePaper extends Component {
                 placeholder="Total Marks For This Question (Optional)"
                 className="validate"
               />
+              <img
+                src={process.env.PUBLIC_URL + "/close.svg"}
+                onClick={e => {
+                  this.removeHandler(e, index);
+                }}
+                alt="Cancel Button"
+                height="27px"
+                style={style.button}
+              />
             </div>
           );
         })}
@@ -168,14 +230,13 @@ export default class GeneratePaper extends Component {
             height="30px"
           />
 
-          <Link
-            href=""
+          <a
             onClick={this.submitHandler}
-            class="waves-effect waves-light btn"
+            className="waves-effect waves-light btn"
             style={style.submitButton}
           >
             Submit
-          </Link>
+          </a>
         </div>
       </div>
     );

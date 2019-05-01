@@ -1,27 +1,29 @@
 import React, { Component } from "react";
-import style from "./stylesheet/UnitInputStyle";
+import { style } from "./stylesheet/style";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
 
-ipcRenderer.on("unitNamePresent", (event, data) => {
-  alert("Unit Name Already Present");
-});
-
-export default class UnitInput extends Component {
+export default class AddQuestion extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      unitList: [],
       unitName: "",
-      // marks: null,
       questions: [""]
     };
-    this.unitNameInput = React.createRef();
-    // this.unitMarksInput = React.createRef();
-
-    this.submitHandler = this.submitHandler.bind(this);
   }
+
+  componentDidMount() {
+    ipcRenderer.send("getUnitList");
+  }
+
+  unitNamechangeHandler = (e, index) => {
+    this.setState({
+      unitName: e.target.value
+    });
+  };
 
   changeHandler = (e, index) => {
     let questions = [...this.state.questions];
@@ -47,41 +49,44 @@ export default class UnitInput extends Component {
     });
   };
 
-  async submitHandler() {
-    await this.setState({
-      unitName: this.unitNameInput.current.value,
-      // marks: this.state.marks,
-      // marks: this.unitMarksInput.current.value
-    });
-
-    ipcRenderer.send("addUnit", {
+  submitHandler = () => {
+    ipcRenderer.send("addQuestion", {
       unitName: this.state.unitName,
-      questionsArr: this.state.questions,
-      // marks: this.state.marks
+      questionsArr: this.state.questions
     });
-  }
+  };
 
   render() {
+    // listen for unitListReady which gets all unitName from db
+    ipcRenderer.on("unitListReady", (event, data) => {
+      this.setState({
+        unitList: data
+      });
+    });
+
+    console.log(this.state.unitName);
+
     return (
       <div>
-        <div style={style.inputContainer}>
-          <div>
-            <input
-              type="text"
-              ref={this.unitNameInput}
-              placeholder="Enter Unit Name"
-              class="validate"
-            />
-          </div>
-          {/* <div>
-            <input
-              type="number"
-              ref={this.unitMarksInput}
-              placeholder="Marks for this unit (optional)"
-              class="validate"
-            />
-          </div> */}
+        <div style={style.selectUnitContainer}>
+          <label style={style.selectBoxLabel}>Select Unit</label>
+          <select
+            defaultValue={"DEFAULT"}
+            name="unit"
+            style={style.selectBox}
+            onChange={e => {
+              this.unitNamechangeHandler(e);
+            }}
+          >
+            <option value="DEFAULT" disabled>
+              Choose Unit
+            </option>
+            {this.state.unitList.map((item, index) => {
+              return <option key={index}>{item}</option>;
+            })}
+          </select>
         </div>
+
         <div style={style.questionInputContainer}>
           {this.state.questions.map((data, index) => {
             return (
