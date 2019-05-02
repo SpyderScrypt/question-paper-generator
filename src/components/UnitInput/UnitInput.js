@@ -9,6 +9,10 @@ ipcRenderer.on("unitNamePresent", (event, data) => {
   alert("Unit Name Already Present");
 });
 
+ipcRenderer.on("unitAddedSuccessfully", event => {
+  alert("Unit Added Successfully");
+});
+
 export default class UnitInput extends Component {
   constructor(props) {
     super(props);

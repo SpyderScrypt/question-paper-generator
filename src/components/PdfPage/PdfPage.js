@@ -33,6 +33,7 @@ export default class PdfPage extends Component {
       this.setState({
         redirect: true
       });
+      document.getElementsByClassName("main-nav")[0].style.display = "flex";
     });
 
     let questionsData = this.props.location.state.questionPaperData

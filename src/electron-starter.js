@@ -107,6 +107,8 @@ ipcMain.on("addUnit", (event, unitData) => {
         // marks: unitData.marks
       })
       .write();
+
+    mainWindow.webContents.send("unitAddedSuccessfully");
   }
 });
 
@@ -247,6 +249,13 @@ ipcMain.on("print-to-pdf", function(event) {
       });
     }
   );
+});
+
+// On deleteUnit
+ipcMain.on("deleteUnit", (event, unitName) => {
+  db.remove({ unitName: unitName }).write();
+
+  mainWindow.webContents.send("unitDeletedSuccessfully");
 });
 
 // -------------------------------- Dump Code ----------------------------------

@@ -7,17 +7,17 @@ export default class MainNavbar extends Component {
     return (
       <div style={style.titleBlock} className="main-nav">
         <p>
-          <Link style={style.titleText} to={"/knowledgebase"}>
+          <Link id="knowledgebaseLink" style={style.titleText} to={"/knowledgebase"}>
             Knowledge Bank
           </Link>
         </p>
         <p style={style.titleText}>
-          <Link style={style.titleText} to={"/generatepaper"}>
+          <Link id="generatepaperLink" style={style.titleText} to={"/generatepaper"}>
             Generate Paper
           </Link>
         </p>
         <p style={style.titleText}>
-          <Link style={style.titleText} to={"/instructions"}>
+          <Link id="instructionsLink" style={style.titleText} to={"/instructions"}>
             Instructions
           </Link>
         </p>

@@ -30,7 +30,13 @@ export default class GeneratePaper extends Component {
   }
 
   componentDidMount() {
+    document.getElementById("generatepaperLink").style.color = "#2BBBAD";
     ipcRenderer.send("getUnitList");
+  }
+
+  componentWillUnmount(){
+    document.getElementById("generatepaperLink").style.color = "#ffff";
+
   }
 
   changeHandler = (e, index) => {

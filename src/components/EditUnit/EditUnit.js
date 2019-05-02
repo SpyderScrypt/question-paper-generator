@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { style } from "./stylesheet/style";
 
 const electron = window.require("electron");
@@ -15,7 +15,8 @@ export default class EditUnit extends Component {
     this.state = {
       unitList: [],
       unitName: "",
-      questions: null
+      questions: null,
+      redirect: false
     };
   }
 
@@ -55,7 +56,33 @@ export default class EditUnit extends Component {
     });
   };
 
+  deleteUnitHandler = () => {
+    let confirmBoolean = window.confirm(
+      "Are you sure you want to delete this unit ?"
+    );
+    if (confirmBoolean) {
+      ipcRenderer.send("deleteUnit", this.state.unitName);
+      ipcRenderer.on("unitDeletedSuccessfully", event => {
+        alert("Unit Deleted Successfully");
+        ipcRenderer.removeAllListeners("unitDeletedSuccessfully");
+        this.setState({
+          redirect: true
+        });
+      });
+    }
+  };
+
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/knowledgebase"
+          }}
+        />
+      );
+    }
+
     ipcRenderer.on("unitListReady", (event, data) => {
       this.setState({
         unitList: data
@@ -126,6 +153,15 @@ export default class EditUnit extends Component {
               style={style.submitButton}
             >
               Save Changes
+            </Link>
+
+            <Link
+              href=""
+              onClick={this.deleteUnitHandler}
+              className="waves-effect waves-light btn red darken-3"
+              style={style.deleteButton}
+            >
+              Delete Unit
             </Link>
           </div>
         )}

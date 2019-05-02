@@ -24,7 +24,8 @@ export const style = {
   },
   submitButton: {
     width: "80%",
-    marginTop: "5%"
+    marginTop: "5%",
+    marginBottom: "5%"
   },
   validate: {
     width: "70%"
